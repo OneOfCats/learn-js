@@ -46,10 +46,6 @@ html, body{
 	height: 100%;
 	font-family: Calibri;
 	color: #fcae88;
-	-webkit-transition: all 1s ease 0;
-    -moz-transition: all 1s ease 0;
-    -o-transition: all 1s ease 0;
-    transition: all 1s ease 0;
 }
 a{
 	cursor: pointer;
@@ -59,6 +55,12 @@ a{
 	margin: 40px auto 0;
 	background: #442142;
 	padding: 24px 18px;
+}
+h2{
+	font-size: 2.4em;
+	display: block;
+	text-align: center;
+	margin-bottom: 8px;
 }
 section{
 	background: #6d3655;
@@ -75,6 +77,10 @@ section:first-child{
 	cursor: pointer;
 	min-height: 2em;
 	font-size: 2em;
+	-webkit-transition: all 1s ease 0;
+    -moz-transition: all 1s ease 0;
+    -o-transition: all 1s ease 0;
+    transition: all 1s ease 0;
 }
 .plate:hover{
 	background: #c9697a;
@@ -143,19 +149,9 @@ input[type="text"]{
 	outline: none;
 	text-align: center;
 }
-h2{
-	font-size: 2.4em;
-	display: block;
-	text-align: center;
-	margin-bottom: 8px;
-}
 
-#debug{
-	background: black;
-	color: white;
-	font-size: 20px;
-	position: fixed;
-}
-#debug div{
-	margin: 10px 0;
+@media only screen and (min-resolution: 117dpi) and (max-resolution: 119dpi), only screen and (min-resolution: 131dpi) and (max-resolution: 133dpi), only screen and (min-resolution: 145dpi) and (max-resolution: 154dpi), only screen and (min-resolution: 162dpi) and (max-resolution: 164dpi), only screen and (min-resolution: 169dpi) {
+  .del{
+  	visibility: visible;
+  }
 }

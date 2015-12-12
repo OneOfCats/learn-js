@@ -52,6 +52,7 @@ function parentByAttribute(elem, attr){
 function DragField(elem){
   var ifc = elem;
   ifc.addEventListener('mousedown', downed);
+  ifc.addEventListener('touchstart', downed);
   var positions = {
     offsetX: 0,
     offsetY: 0
@@ -69,58 +70,72 @@ function DragField(elem){
 
   function downed(event){
     var target = event.target;
+    if (target === null) return;
     while(!target.hasAttribute('draggable')){
       target = target.parentNode;
-      if(target == ifc) return;
+      if(target == ifc || target === null) return;
     }
     if(!hasParent(target, ifc)) return;
     draggingElem = target;
     previousDroppable = parentByAttribute(draggingElem, 'droppable');
-    cursor.cursorX = event.pageX;
-    cursor.cursorY = event.pageY;
+    cursor.cursorX = event.pageX || event.targetTouches[0].pageX;
+    cursor.cursorY = event.pageY || event.targetTouches[0].pageY;
 
     document.body.addEventListener('mousemove', prepearDrag);
     document.body.addEventListener('mouseup', removePrepearing);
+
+    document.body.addEventListener('touchmove', prepearDrag);
+    document.body.addEventListener('touchend', removePrepearing);
+
     event.preventDefault();
   }
 
   function prepearDrag(event){
-    if(Math.abs(event.pageX - cursor.cursorX) > 4 || Math.abs(event.pageY - cursor.cursorY) > 4){
+    if(Math.abs((event.pageX || event.targetTouches[0].pageX) - cursor.cursorX) > 4 || Math.abs((event.pageY || event.targetTouches[0].pageY) - cursor.cursorY) > 4){
       document.body.removeEventListener('mouseup', removePrepearing);
       document.body.removeEventListener('mousemove', prepearDrag);
-      positions.offsetX = Math.abs(event.clientX - draggingElem.getBoundingClientRect().left);
-      positions.offsetY = Math.abs(event.clientY - draggingElem.getBoundingClientRect().top);
+
+      document.body.removeEventListener('touchend', removePrepearing);
+      document.body.removeEventListener('touchmove', prepearDrag);
+
+      positions.offsetX = Math.abs((event.clientX || event.targetTouches[0].clientX) - draggingElem.getBoundingClientRect().left);
+      positions.offsetY = Math.abs((event.clientY || event.targetTouches[0].clientY) - draggingElem.getBoundingClientRect().top);
 
       avatar = draggingElem.cloneNode(true);
       avatar.style.width = draggingElem.offsetWidth - parseInt(window.getComputedStyle(draggingElem).paddingLeft) - parseInt(window.getComputedStyle(draggingElem).paddingRight) + 'px';
       draggingElem.style.display = 'none';
       avatar.style.position = 'absolute';
-      avatar.style.left = event.pageX - positions.offsetX + 'px';
-      avatar.style.top = event.pageY - positions.offsetY + 'px';
+      avatar.style.left = (event.pageX || event.targetTouches[0].pageX) - positions.offsetX + 'px';
+      avatar.style.top = (event.pageY || event.targetTouches[0].pageY) - positions.offsetY + 'px';
       document.body.appendChild(avatar);
 
       document.body.addEventListener('mousemove', dragging);
       document.body.addEventListener('mousemove', hoverMargins);
       document.body.addEventListener('mouseup', stopDragging);
+
+      document.body.addEventListener('touchmove', dragging);
+      document.body.addEventListener('touchmove', hoverMargins);
+      document.body.addEventListener('touchend', stopDragging);
     }
   }
 
   function dragging(event){
-    if(event.pageX - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + avatar.offsetWidth < document.documentElement.clientWidth + window.pageXOffset)
-      avatar.style.left = event.pageX - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + 'px';
-    if(event.pageY - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + avatar.offsetHeight < document.documentElement.clientHeight + window.pageYOffset)
-      avatar.style.top = event.pageY - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + 'px';
-    var debug = document.getElementById('debug');
-    debug.children[0].getElementsByTagName('SPAN')[0].innerHTML = event.pageX;
-    debug.children[1].getElementsByTagName('SPAN')[0].innerHTML = positions.offsetX;
-    debug.children[2].getElementsByTagName('SPAN')[0].innerHTML = parseInt(window.getComputedStyle(avatar).marginLeft);
-    debug.children[3].getElementsByTagName('SPAN')[0].innerHTML = draggingElem.offsetWidth;
+    if((event.pageX || event.targetTouches[0].pageX) - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + avatar.offsetWidth < document.documentElement.clientWidth + window.pageXOffset)
+      avatar.style.left = (event.pageX || event.targetTouches[0].pageX) - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + 'px';
+    if((event.pageY || event.targetTouches[0].pageY) - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + avatar.offsetHeight < document.documentElement.clientHeight + window.pageYOffset)
+      avatar.style.top = (event.pageY || event.targetTouches[0].pageY) - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + 'px';
   }
 
   function stopDragging(event){
     document.body.removeEventListener('mousemove', dragging);
     document.body.removeEventListener('mousemove', hoverMargins);
     document.body.removeEventListener('mouseup', stopDragging);
+
+
+    document.body.removeEventListener('touchmove', dragging);
+    document.body.removeEventListener('touchmove', hoverMargins);
+    document.body.removeEventListener('touchend', stopDragging);
+
     document.body.removeChild(avatar);
     avatar = null;
     var draggable = ifc.querySelector('.margin-bottom[draggable]');
@@ -139,10 +154,11 @@ function DragField(elem){
   }
 
   function hoverMargins(event){
-    var checkPoint = {x: event.pageX, y: avatar.getBoundingClientRect().top - 1};
+    var checkPoint = {x: (event.pageX || event.targetTouches[0].pageX), y: avatar.getBoundingClientRect().top - 1};
     hovered = document.elementFromPoint(checkPoint.x, checkPoint.y);
     if(hovered == avatar) return;
     while(hovered != document.documentElement){
+      if(hovered === null) return;
       if((hovered.hasAttribute('draggable') || hovered.hasAttribute('droppable')) && hasParent(hovered, ifc)) break;
       hovered = hovered.parentNode;
     }
@@ -178,6 +194,7 @@ function DragField(elem){
 
   function removePrepearing(event){
     document.body.removeEventListener('mousemove', prepearDrag);
+    document.body.removeEventListener('touchmove', prepearDrag);
   }
 }
 
@@ -185,6 +202,8 @@ function ChangableField(elem){
   var ifc = elem;
   ifc.addEventListener('dblclick', editText);
   ifc.addEventListener('click', checkClick);
+  ifc.addEventListener('touchstart', editText);
+  ifc.addEventListener('touchstart', checkClick);
   document.addEventListener('keypress', checkClick);
 
   function checkClick(event){
