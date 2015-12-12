@@ -86,9 +86,11 @@ section:first-child{
 	display: block;
 	outline: none;
 	font-size: 1.1em;
+	overflow: hidden;
 }
 .plate p{
 	font-size: 0.8em;
+	overflow: hidden;
 }
 .clone{
 	margin: 0;
