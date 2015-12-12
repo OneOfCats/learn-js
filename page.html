@@ -8,20 +8,58 @@
 </head>
 
 <body>
+  <div id="debug">
+    <div>event.pageY: <span></span></div>
+    <div>window.pageYOffset: <span></span></div>
+    <div>positions.offsetY: <span></span></div>
+    <div>draggingElem.getBoundingClientRect().top: <span></span></div>
+  </div>
   <div class="wrapper">
     <div id="interface">
+      <h2>To do</h2>
       <section droppable>
         <div draggable class="plate">
-          <textarea name="" id="">1</textarea>
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
         </div>
-        <div draggable class="plate">2</div>
-        <div draggable class="plate">3</div>
+        <div draggable class="plate">
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
+        </div>
       </section>
+      <h2>In progress</h2>
       <section droppable>
-        <div draggable class="plate">1</div>
-        <div draggable class="plate">2</div>
-        <div draggable class="plate">3</div>
+        <div draggable class="plate">
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
+        </div>
+        <div draggable class="plate">
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
+        </div>
       </section>
+      <h2>Done</h2>
+      <section droppable>
+        <div draggable class="plate">
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
+        </div>
+        <div draggable class="plate">
+          <div class="del">x</div>
+          <span contenteditable="true">Title</span>
+          <p contenteditable="true">Description</p>
+        </div>
+      </section>
+      <div id="buttons">
+        <input type="text" placeholder="Title" name="titleLable" id="titleLable">
+        <input type="text" placeholder="Description" name="descriptionLable" id="descriptionLable">
+        <a class="addTicket">Add ticket</a>
+      </div>
     </div>
   </div>
 </body>

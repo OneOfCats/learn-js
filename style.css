@@ -50,12 +50,6 @@ html, body{
     -moz-transition: all 1s ease 0;
     -o-transition: all 1s ease 0;
     transition: all 1s ease 0;
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 a{
 	cursor: pointer;
@@ -69,7 +63,7 @@ a{
 section{
 	background: #6d3655;
 	padding: 10px 12px;
-	margin-top: 26px;
+	margin-bottom: 26px;
 }
 section:first-child{
 	margin-top: 0;
@@ -79,49 +73,27 @@ section:first-child{
 	background: #b05c6b;
 	padding: 6px 10px;
 	cursor: pointer;
+	min-height: 2em;
 	font-size: 2em;
 }
 .plate:hover{
 	background: #c9697a;
 }
+.plate span:focus, .plate p:focus{
+	background: rgba(201, 105, 122, 0.5);
+}
+.plate span, .plate p{
+	display: block;
+	outline: none;
+	font-size: 1.1em;
+}
+.plate p{
+	font-size: 0.8em;
+}
 .clone{
 	margin: 0;
 	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
 	background: #c9697a;
-}
-textarea{
-	font-size: 1em;
-	font-family: Calibri;
-	color: #fcae88;
-	border: none;
-	background: none;
-	cursor: pointer;
-	width: 100%;
-	resize: none;
-	overflow: hidden;
-}
-
-#lines > div > div{
-	position: relative;
-	background: #fcae88;
-	visibility: hidden;
-	-webkit-transition: all 0.5s ease 0;
-	-moz-transition: all 0.5s ease 0;
-	-o-transition: all 0.5s ease 0;
-	transition: all 0.5s ease 0;
-}
-#network-interface a{
-	display: block;
-	background: #b05c6b;
-	padding: 8px 10px;
-	margin: 8px 8px 8px 12px;
-	width: 96px;
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .margin-bottom{
@@ -130,9 +102,58 @@ textarea{
 .padding-top{
 	padding-top: 50px;
 }
-textarea{
-	outline: none;
+.del{
+	float: right;
+	color: red;
+	font-size: 0.6em;
+	visibility: hidden;
 }
-textarea:focus{
-	background: rgba(0, 0, 0, 0.1);
+.plate:hover .del{
+	visibility: visible;
+}
+#buttons{
+	text-align: center;
+}
+#buttons > *{
+	margin: 5px 0;
+}
+a{
+    background: #b05c6b;
+    display: inline-block;
+    padding: 8px 10px;
+	font-size: 1.5em;
+	width: 200px;
+	height: 1em;
+}
+a:hover{
+	background: #c9697a;
+}
+a:active{
+	background: #6d3655;
+}
+input[type="text"]{
+	display: inline-block;
+	width: 200px;
+	font-size: 1.5em;
+    padding: 8px 10px;
+	height: 1em;
+	border: none;
+	outline: none;
+	text-align: center;
+}
+h2{
+	font-size: 2.4em;
+	display: block;
+	text-align: center;
+	margin-bottom: 8px;
+}
+
+#debug{
+	background: black;
+	color: white;
+	font-size: 20px;
+	position: fixed;
+}
+#debug div{
+	margin: 10px 0;
 }

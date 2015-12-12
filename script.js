@@ -34,7 +34,7 @@
 function hasParent(elem, parent){
   elem = elem.parentNode;
   while(elem != null){
-    if(elem.matches(parent)) return true;
+    if(elem == parent) return true;
     elem = elem.parentNode;
   }
   return false;
@@ -50,11 +50,9 @@ function parentByAttribute(elem, attr){
 }
 
 function DragField(elem){
-  elem.addEventListener('mousedown', downed);
   var ifc = elem;
+  ifc.addEventListener('mousedown', downed);
   var positions = {
-    elementX: 0,
-    elementY: 0,
     offsetX: 0,
     offsetY: 0
   };
@@ -73,32 +71,32 @@ function DragField(elem){
     var target = event.target;
     while(!target.hasAttribute('draggable')){
       target = target.parentNode;
-      if(target == elem) return;
+      if(target == ifc) return;
     }
+    if(!hasParent(target, ifc)) return;
     draggingElem = target;
     previousDroppable = parentByAttribute(draggingElem, 'droppable');
-    cursor.cursorX = event.pageX + window.pageXOffset;
-    cursor.cursorY = event.pageY + window.pageYOffset;
+    cursor.cursorX = event.pageX;
+    cursor.cursorY = event.pageY;
 
     document.body.addEventListener('mousemove', prepearDrag);
     document.body.addEventListener('mouseup', removePrepearing);
+    event.preventDefault();
   }
 
   function prepearDrag(event){
-    if(Math.abs(event.pageX + window.pageXOffset - cursor.cursorX) > 4 || Math.abs(event.pageY + window.pageYOffset - cursor.cursorY) > 4){
+    if(Math.abs(event.pageX - cursor.cursorX) > 4 || Math.abs(event.pageY - cursor.cursorY) > 4){
       document.body.removeEventListener('mouseup', removePrepearing);
       document.body.removeEventListener('mousemove', prepearDrag);
-      positions.elementX = window.pageXOffset + draggingElem.getBoundingClientRect().left;
-      positions.elementY = window.pageYOffset + draggingElem.getBoundingClientRect().top;
-      positions.offsetX = Math.abs(cursor.cursorX - draggingElem.getBoundingClientRect().left);
-      positions.offsetY = Math.abs(cursor.cursorY - draggingElem.getBoundingClientRect().top);
+      positions.offsetX = Math.abs(event.clientX - draggingElem.getBoundingClientRect().left);
+      positions.offsetY = Math.abs(event.clientY - draggingElem.getBoundingClientRect().top);
 
       avatar = draggingElem.cloneNode(true);
       avatar.style.width = draggingElem.offsetWidth - parseInt(window.getComputedStyle(draggingElem).paddingLeft) - parseInt(window.getComputedStyle(draggingElem).paddingRight) + 'px';
       draggingElem.style.display = 'none';
       avatar.style.position = 'absolute';
-      avatar.style.left = window.pageXOffset + event.pageX - positions.offsetX + 'px';
-      avatar.style.top = window.pageYOffset + event.pageY - positions.offsetY + 'px';
+      avatar.style.left = event.pageX - positions.offsetX + 'px';
+      avatar.style.top = event.pageY - positions.offsetY + 'px';
       document.body.appendChild(avatar);
 
       document.body.addEventListener('mousemove', dragging);
@@ -108,8 +106,15 @@ function DragField(elem){
   }
 
   function dragging(event){
-    avatar.style.left = window.pageXOffset + event.pageX - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + 'px';
-    avatar.style.top = window.pageYOffset + event.pageY - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + 'px';
+    if(event.pageX - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + avatar.offsetWidth < document.documentElement.clientWidth + window.pageXOffset)
+      avatar.style.left = event.pageX - positions.offsetX - parseInt(window.getComputedStyle(avatar).marginLeft) + 'px';
+    if(event.pageY - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + avatar.offsetHeight < document.documentElement.clientHeight + window.pageYOffset)
+      avatar.style.top = event.pageY - positions.offsetY - parseInt(window.getComputedStyle(avatar).marginTop) + 'px';
+    var debug = document.getElementById('debug');
+    debug.children[0].getElementsByTagName('SPAN')[0].innerHTML = event.pageX;
+    debug.children[1].getElementsByTagName('SPAN')[0].innerHTML = positions.offsetX;
+    debug.children[2].getElementsByTagName('SPAN')[0].innerHTML = parseInt(window.getComputedStyle(avatar).marginLeft);
+    debug.children[3].getElementsByTagName('SPAN')[0].innerHTML = draggingElem.offsetWidth;
   }
 
   function stopDragging(event){
@@ -138,7 +143,7 @@ function DragField(elem){
     hovered = document.elementFromPoint(checkPoint.x, checkPoint.y);
     if(hovered == avatar) return;
     while(hovered != document.documentElement){
-      if(hovered.hasAttribute('draggable') || hovered.hasAttribute('droppable')) break;
+      if((hovered.hasAttribute('draggable') || hovered.hasAttribute('droppable')) && hasParent(hovered, ifc)) break;
       hovered = hovered.parentNode;
     }
 
@@ -176,4 +181,55 @@ function DragField(elem){
   }
 }
 
+function ChangableField(elem){
+  var ifc = elem;
+  ifc.addEventListener('dblclick', editText);
+  ifc.addEventListener('click', checkClick);
+  document.addEventListener('keypress', checkClick);
+
+  function checkClick(event){
+    if(event.target.classList.contains('del')){
+      deletePlate(event.target);
+    }else if(event.target.classList.contains('addTicket') || event.keyCode === 13){
+      addTicket();
+    }
+  }
+
+  function addTicket(){
+    if(document.getElementById('titleLable').value.length == 0 || document.getElementById('descriptionLable').value.length == 0) return;
+    var droppable = ifc.querySelector('[droppable]');
+    var elem = droppable.children[0].cloneNode(true);
+    elem.getElementsByTagName('SPAN')[0].innerHTML = document.getElementById('titleLable').value;
+    document.getElementById('titleLable').value = '';
+    elem.getElementsByTagName('P')[0].innerHTML = document.getElementById('descriptionLable').value;
+    document.getElementById('descriptionLable').value = '';
+    droppable.insertAdjacentElement('afterBegin', elem);
+  }
+
+  function editText(event){
+    var target = event.target;
+    while(!target.hasAttribute('contenteditable')){
+      target = target.parentNode;
+      if(target == ifc) return;
+    }
+    target.focus();
+    var range = document.createRange();
+    range.selectNodeContents(target);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function deletePlate(elem){
+    var target = elem.parentNode;
+    while(!target.hasAttribute('draggable')){
+      target = target.parentNode;
+      if(target == ifc) return;
+    }
+    target.parentNode.removeChild(target);
+  }
+}
+
 new DragField(document.getElementById('interface'));
+new ChangableField(document.getElementById('interface'));
