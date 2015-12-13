@@ -66,6 +66,10 @@ section{
 	background: #6d3655;
 	padding: 10px 12px;
 	margin-bottom: 26px;
+	-webkit-transition: padding-top 0.2s ease-out 0s;
+    -moz-transition: padding-top 0.2s ease-out 0s;
+    -o-transition: padding-top 0.2s ease-out 0s;
+    transition: padding-top 0.2s ease-out 0s;
 }
 section:first-child{
 	margin-top: 0;
@@ -77,10 +81,10 @@ section:first-child{
 	cursor: pointer;
 	min-height: 2em;
 	font-size: 2em;
-	-webkit-transition: all 1s ease 0;
-    -moz-transition: all 1s ease 0;
-    -o-transition: all 1s ease 0;
-    transition: all 1s ease 0;
+	-webkit-transition: margin 0.2s ease-out 0s;
+    -moz-transition: margin 0.2s ease-out 0s;
+    -o-transition: margin 0.2s ease-out 0s;
+    transition: margin 0.2s ease-out 0s;
 }
 .plate:hover{
 	background: #c9697a;
@@ -106,6 +110,9 @@ section:first-child{
 
 .margin-bottom{
 	margin-bottom: 50px;
+}
+.margin-top{
+	margin-top: -50px;
 }
 .padding-top{
 	padding-top: 50px;
@@ -148,6 +155,15 @@ input[type="text"]{
 	border: none;
 	outline: none;
 	text-align: center;
+}
+#debug{
+	background: black;
+	color: white;
+	font-size: 20px;
+	position: fixed;
+}
+#debug div{
+	margin: 10px 0;
 }
 
 @media only screen and (min-resolution: 117dpi) and (max-resolution: 119dpi), only screen and (min-resolution: 131dpi) and (max-resolution: 133dpi), only screen and (min-resolution: 145dpi) and (max-resolution: 154dpi), only screen and (min-resolution: 162dpi) and (max-resolution: 164dpi), only screen and (min-resolution: 169dpi) {

@@ -102,6 +102,7 @@ function DragField(elem){
       positions.offsetY = Math.abs((event.clientY || event.targetTouches[0].clientY) - draggingElem.getBoundingClientRect().top);
 
       avatar = draggingElem.cloneNode(true);
+      avatar.classList.add('avatar');
       avatar.style.width = draggingElem.offsetWidth - parseInt(window.getComputedStyle(draggingElem).paddingLeft) - parseInt(window.getComputedStyle(draggingElem).paddingRight) + 'px';
       draggingElem.style.display = 'none';
       avatar.style.position = 'absolute';
@@ -141,16 +142,15 @@ function DragField(elem){
     var draggable = ifc.querySelector('.margin-bottom[draggable]');
     var droppable = ifc.querySelector('.padding-top[droppable]');
     if(draggable){
+      draggable.style.transition = 'none';
       draggable.insertAdjacentElement('afterEnd', draggingElem);
     }else if(droppable){
+      droppable.style.transition = 'none';
       droppable.insertAdjacentElement('afterBegin', draggingElem);
-    }else{
-
     }
     draggingElem.style.display = 'block';
-    draggingElem = hoveredPrevious = previousDroppable = null;
     hoverMarginsReset();
-    return;
+    draggingElem = hoveredPrevious = previousDroppable = null;
   }
 
   function hoverMargins(event){
@@ -162,7 +162,7 @@ function DragField(elem){
       if((hovered.hasAttribute('draggable') || hovered.hasAttribute('droppable')) && hasParent(hovered, ifc)) break;
       hovered = hovered.parentNode;
     }
-
+    if(hovered.style.transition == 'none') hovered.style.transition = '';
     if(hovered.hasAttribute('droppable') && checkPoint.y - hovered.getBoundingClientRect().top < parseInt(window.getComputedStyle(hovered).paddingTop) + 10){
       hoverMarginsReset();
       hoveredPrevious = null;
@@ -184,6 +184,7 @@ function DragField(elem){
   }
 
   function hoverMarginsReset(){
+    //draggingElem.classList.remove('margin-top');
     var allElems = ifc.querySelectorAll('[draggable]');
     for(var i = 0; i < allElems.length; i++)
       allElems[i].classList.remove('margin-bottom');
