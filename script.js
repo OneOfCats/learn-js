@@ -251,5 +251,13 @@ function ChangableField(elem){
   }
 }
 
+function AngularLogic($scope){
+  $scope.todos = [{title: 'Title1', description: 'Description1'}];
+  $scope.inProgress = [{title: 'Title2', description: 'Description2'}];
+  $scope.done = [{title: 'Title3', description: 'Description3'}];
+
+  
+}
+
 new DragField(document.getElementById('interface'));
 new ChangableField(document.getElementById('interface'));

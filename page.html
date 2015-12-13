@@ -5,9 +5,16 @@
   <meta charset="utf-8">
   <script src="script.js" defer></script>
   <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 </head>
 
 <body>
+  <div id="debug">
+    <div>event.pageY: <span></span></div>
+    <div>window.pageYOffset: <span></span></div>
+    <div>positions.offsetY: <span></span></div>
+    <div>draggingElem.getBoundingClientRect().top: <span></span></div>
+  </div>
   <div class="wrapper">
     <div id="interface">
       <h2>To do</h2>
