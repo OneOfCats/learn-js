@@ -162,7 +162,7 @@ function DragField(elem){
       if((hovered.hasAttribute('draggable') || hovered.hasAttribute('droppable')) && hasParent(hovered, ifc)) break;
       hovered = hovered.parentNode;
     }
-    if(hovered.style.transition == 'none') hovered.style.transition = '';
+    if(hovered.style.transition) hovered.style.transition = null;
     if(hovered.hasAttribute('droppable') && checkPoint.y - hovered.getBoundingClientRect().top < parseInt(window.getComputedStyle(hovered).paddingTop) + 10){
       hoverMarginsReset();
       hoveredPrevious = null;
