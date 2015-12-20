@@ -1,66 +1,71 @@
 <!DOCTYPE HTML>
-<html>
+<html ng-app='application'>
 
 <head>
   <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js" defer></script>
   <script src="script.js" defer></script>
   <link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 </head>
 
-<body>
-  <div id="debug">
-    <div>event.pageY: <span></span></div>
-    <div>window.pageYOffset: <span></span></div>
-    <div>positions.offsetY: <span></span></div>
-    <div>draggingElem.getBoundingClientRect().top: <span></span></div>
+<body ng-controller="appController">
+  <!--Блок для дебага. В нём можно видеть, как динамически изменяется модель в angular-->
+  <div id="debug" style="display:none;">
+    <div>
+      app.todo: <br>
+      <span ng-repeat="elem in todo">
+        {{elem.title}}<br>
+        {{elem.description}}<br><br>
+      </span>
+    </div>
+    <div>
+      app.inProgress: <br>
+      <span ng-repeat="elem in inProgress">
+        {{elem.title}}<br>
+        {{elem.description}}<br><br>
+      </span>
+    </div>
+    <div>
+      app.done: <br>
+      <span ng-repeat="elem in done">
+        {{elem.title}}<br>
+        {{elem.description}}<br><br>
+      </span>
+    </div>
   </div>
   <div class="wrapper">
     <div id="interface">
       <h2>To do</h2>
-      <section droppable>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
-        </div>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
+      <section droppable id="todo">
+        <div draggable class="plate" ng-repeat="elem in todo">
+          <div class="del" ng-click="delPlate($index, 'todo')">x</div>
+          <span contenteditable="true" ng-model="elem.title"></span>
+          <p contenteditable="true" ng-model="elem.description"></p>
         </div>
       </section>
       <h2>In progress</h2>
-      <section droppable>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
-        </div>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
+      <section droppable id="inProgress">
+        <div draggable class="plate" ng-repeat="elem in inProgress">
+          <div class="del" ng-click="delPlate($index, 'inProgress')" ng-touch="delPlate($index, inProgress)">x</div>
+          <span contenteditable="true" ng-model="elem.title"></span>
+          <p contenteditable="true" ng-model="elem.description"></p>
         </div>
       </section>
       <h2>Done</h2>
-      <section droppable>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
-        </div>
-        <div draggable class="plate">
-          <div class="del">x</div>
-          <span contenteditable="true">Title</span>
-          <p contenteditable="true">Description</p>
+      <section droppable id="done">
+        <div draggable class="plate" ng-repeat="elem in done">
+          <div class="del" ng-click="delPlate($index, 'done')">x</div>
+          <span contenteditable="true" ng-model="elem.title"></span>
+          <p contenteditable="true" ng-model="elem.description"></p>
         </div>
       </section>
-      <div id="buttons">
-        <input type="text" placeholder="Title" name="titleLable" id="titleLable">
-        <input type="text" placeholder="Description" name="descriptionLable" id="descriptionLable">
-        <a class="addTicket">Add ticket</a>
-      </div>
+      <form ng-submit="addPlate()">
+        <div id="buttons">
+          <input type="text" placeholder="Title" name="titleLable" id="titleLable" ng-model="newTitle">
+          <input type="text" placeholder="Description" name="descriptionLable" id="descriptionLable" ng-model="newDescription">
+          <input type="submit" value="Add ticket">
+        </div>
+      </form>
     </div>
   </div>
 </body>

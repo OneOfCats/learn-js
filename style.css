@@ -43,7 +43,6 @@ table {
 }
 
 html, body{
-	height: 100%;
 	font-family: Calibri;
 	color: #fcae88;
 }
@@ -132,18 +131,23 @@ section:first-child{
 #buttons > *{
 	margin: 5px 0;
 }
-a{
+a, input[type="submit"]{
     background: #b05c6b;
     display: inline-block;
-    padding: 8px 10px;
+    padding: 0 10px;
 	font-size: 1.5em;
-	width: 200px;
-	height: 1em;
+	width: 220px;
+	height: 40px;
+	line-height: 40px;
+	border: none;
+	color: rgb(252, 174, 136);
+	cursor: pointer;
+	outline: none;
 }
-a:hover{
+a:hover, input[type="submit"]:hover{
 	background: #c9697a;
 }
-a:active{
+a:active, input[type="submit"]:active{
 	background: #6d3655;
 }
 input[type="text"]{
