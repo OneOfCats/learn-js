@@ -149,14 +149,12 @@
         var toName = draggable.parentNode.getAttribute('id');
         var toIndex = Array.prototype.indexOf.call(draggable.parentNode.getElementsByTagName('DIV'), draggable) + 1;
         angular.element(document.body).scope().movePlate({obj: fromName, ind: draggingIndex}, {obj: toName, ind: toIndex});
-        //$scope.movePlate({obj: fromName, ind: draggingIndex}, {obj: toName, ind: toIndex});
       }else if(droppable){
         droppable.style.transition = 'none';
         var fromName = draggingElem.parentNode.getAttribute('id');
         var toName = droppable.getAttribute('id');
         var toIndex = 0;
         angular.element(document.body).scope().movePlate({obj: fromName, ind: draggingIndex}, {obj: toName, ind: toIndex});
-        //$scope.movePlate({obj: fromName, ind: draggingIndex}, {obj: toName, ind: toIndex});
       }
       draggingElem.style.display = 'block';
       hoverMarginsReset();
@@ -173,7 +171,7 @@
         hovered = hovered.parentNode;
       }
       if(hovered.style.transition) hovered.style.transition = null;
-      if(hovered.hasAttribute('droppable') && checkPoint.y - hovered.getBoundingClientRect().top < parseInt(window.getComputedStyle(hovered).paddingTop) + 10){
+      if(hovered.hasAttribute('droppable') && checkPoint.y - hovered.getBoundingClientRect().top < parseInt(window.getComputedStyle(hovered).paddingTop) + parseInt(window.getComputedStyle(hovered).paddingTop)){
         hoverMarginsReset();
         hoveredPrevious = null;
         hovered.classList.add('padding-top');
