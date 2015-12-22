@@ -237,3 +237,6 @@
       sel.addRange(range);
     }
   }
+
+new DragField(document.getElementById('interface'));
+new ChangableField(document.getElementById('interface'));
